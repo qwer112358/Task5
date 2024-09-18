@@ -1,0 +1,54 @@
+﻿@{
+	ViewData["Title"] = "Home Page";
+}
+
+<div class="container mt-4">
+	<div id="toolbar" class="d-flex align-items-center justify-content-between p-3 bg-light rounded shadow-sm">
+		<div class="d-flex align-items-center gap-3">
+			<label for="region" class="form-label mb-0">Region:</label>
+			<select id="region" class="form-select" style="width: 150px;">
+				<option value="en_US">USA</option>
+				<option value="pl">Poland</option>
+				<option value="fr">French</option>
+				<option value="ru">Russian</option>
+				<option value="uk">Ukrainian</option>
+				<option value="it">Italian</option>
+				<option value="es">Spanish</option>
+				<option value="de">German</option>
+				<option value="ja">Japanese</option>
+			</select>
+
+			<label for="errorCount" class="form-label mb-0">Errors:</label>
+			<input id="errorSlider" type="range" min="0" max="10" step="0.25" class="form-range" style="width: 100px;">
+			<input id="errorInput" type="number" min="0" max="1000" step="0.25" class="form-control" style="width: 80px;">
+
+			<label for="seed" class="form-label mb-0">Seed:</label>
+			<input id="seedInput" type="number" class="form-control" style="width: 120px;">
+
+			<button id="randomSeed" class="btn btn-outline-secondary">
+				<i class="fas fa-dice"></i>
+			</button>
+		</div>
+
+		<button id="exportToCsv" class="btn btn-outline-primary">
+			<i class="fas fa-file-export"></i> Export to CSV
+		</button>
+	</div>
+
+	<div id="data-table-wrapper" class="mt-4 table-responsive" style="max-height: 800px; overflow-y: auto;">
+		<table id="data-table" class="table table-bordered table-hover">
+			<thead class="table-light">
+				<tr>
+					<th>№</th>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Address</th>
+					<th>Phone</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+	</div>
+</div>
+
+<script src="~/js/script.js"></script>
