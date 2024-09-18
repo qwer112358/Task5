@@ -30,18 +30,21 @@ namespace FakeUserGenerator.Controllers
 			{
 				var allUsers = new List<UserData>();
 				Enumerable.Range(0, request.PageNumber).ToList().ForEach(i =>
-					allUsers.AddRange(_dataService.GenerateUsers(new DataGenerationRequest
-					{
-						Region = request.Region,
-						ErrorCount = request.ErrorCount,
-						Seed = request.Seed,
-						PageNumber = i
-					})));
+					allUsers.AddRange(_dataService.GenerateUsers(CreateRequest(request.Region!, request.ErrorCount, request.Seed, i))));
 				csv.WriteRecords(allUsers);
 				writer.Flush();
 				var fileName = $"{request.Region}_error_{request.ErrorCount}_seed_{request.Seed}_users.csv";
 				return File(memoryStream.ToArray(), "text/csv", fileName);
 			}
 		}
+
+		private DataGenerationRequest CreateRequest(string region, double errorCount, int seed, int pageNumber)
+			=> new DataGenerationRequest
+			{
+				Region = region,
+				ErrorCount = errorCount,
+				Seed = seed,
+				PageNumber = pageNumber
+			};
 	}
 }

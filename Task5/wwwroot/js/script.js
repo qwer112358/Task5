@@ -7,13 +7,36 @@
     const exportButton = document.getElementById('exportToCsv');
     const tableBody = document.querySelector('#data-table tbody');
     const tableWrapper = document.getElementById('data-table-wrapper');
-    const warningMessage = document.createElement('div'); 
+    const warningMessage = document.createElement('div');
     warningMessage.style.color = 'red';
-    warningMessage.style.display = 'none'; 
-    document.body.appendChild(warningMessage); 
+    warningMessage.style.display = 'none';
+    document.body.appendChild(warningMessage);
 
     let pageNumber = 0;
     let isLoading = false;
+
+    function getBrowserLanguage() {
+        const lang = navigator.language || navigator.userLanguage;
+        return lang.replace('-', '_'); 
+    }
+
+    function setDefaultRegion() {
+        const browserLang = getBrowserLanguage();
+        const defaultRegion = Array.from(regionSelect.options).some(option => option.value === browserLang)
+            ? browserLang
+            : 'en_US';
+        regionSelect.value = defaultRegion;
+    }
+
+    function setRandomSeed() {
+        let maxSeed = 1000000;
+        seedInput.value = Math.floor(Math.random() * maxSeed);
+    }
+
+    function setDefaultError() {
+        errorInput.value = 0;
+        errorSlider.value = 0;
+    }
 
     function fetchData(append = false) {
         if (isLoading) return;
@@ -53,6 +76,11 @@
             });
     }
 
+    setDefaultRegion(); 
+    setDefaultError();  
+    setRandomSeed();    
+
+    // Привязываем события к элементам
     tableWrapper.addEventListener('scroll', () => {
         if (isLoading) return;
         if (tableWrapper.scrollTop + tableWrapper.clientHeight >= tableWrapper.scrollHeight) {
@@ -85,8 +113,7 @@
     });
 
     randomSeedButton.addEventListener('click', () => {
-        let maxSeed = 1000000;
-        seedInput.value = Math.floor(Math.random() * maxSeed);
+        setRandomSeed(); 
         pageNumber = 0;
         fetchData();
     });
@@ -94,11 +121,11 @@
     exportButton.addEventListener('click', () => {
         if (tableBody.rows.length === 0) {
             warningMessage.textContent = 'Please generate the data first before exporting!';
-            warningMessage.style.display = 'block'; 
+            warningMessage.style.display = 'block';
             setTimeout(() => {
-                warningMessage.style.display = 'none'; 
+                warningMessage.style.display = 'none';
             }, 3000);
-            return; 
+            return;
         }
 
         const region = regionSelect.value;
@@ -124,5 +151,5 @@
             });
     });
 
-    fetchData();
+    fetchData(); 
 });
