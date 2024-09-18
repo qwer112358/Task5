@@ -12,12 +12,10 @@ namespace FakeUserGenerator.Controllers
 	public class DataController : ControllerBase
 	{
 		private readonly IDataGenerationService _dataService;
-		private readonly IDataGenerationService _dataServiceRepeater;
 
-		public DataController(IDataGenerationService dataService, IDataGenerationService dataServiceRepeater)
+		public DataController(IDataGenerationService dataService)
 		{
 			_dataService = dataService;
-			_dataServiceRepeater = dataServiceRepeater;
 		}
 
 		[HttpPost("generate")]
@@ -31,7 +29,7 @@ namespace FakeUserGenerator.Controllers
 			using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
 			{
 				var allUsers = new List<UserData>();
-				Enumerable.Range(0, request.PageNumber + 1).ToList().ForEach(i =>
+				Enumerable.Range(0, request.PageNumber).ToList().ForEach(i =>
 					allUsers.AddRange(_dataService.GenerateUsers(new DataGenerationRequest
 					{
 						Region = request.Region,
