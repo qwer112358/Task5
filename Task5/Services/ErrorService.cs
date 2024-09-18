@@ -21,9 +21,9 @@ namespace FakeUserGenerator.Services
 			};
 			_errorActions = new()
 			{
-				{ 0, (input, position, _) => RemoveSymbol(input, position) },
+				{ 0, (input, position, alphabet) => RemoveSymbol(input, position, alphabet!) },
 				{ 1, (input, position, alphabet) => AddSymbol(input, position, alphabet!) },
-				{ 2, (input, position, _) => SwapNearSymbols(input, position) }
+				{ 2, (input, position, alphabet) => SwapNearSymbols(input, position, alphabet!) }
 			};
 		}
 
@@ -76,16 +76,16 @@ namespace FakeUserGenerator.Services
 			return _errorActions[action](input, position, alphabet);
 		}
 
-		private string RemoveSymbol(string input, int position) =>
-			position < input.Length ? input.Remove(position, 1) : input;
+		private string RemoveSymbol(string input, int position, string alphabet) =>
+			position < input.Length ? input.Remove(position, 1) : AddSymbol(input, position, alphabet);
 
 		private string AddSymbol(string input, int position, string alphabet) =>
 			input.Insert(Math.Min(position, input.Length), alphabet[_random.Next(alphabet.Length)].ToString());
 
-		private string SwapNearSymbols(string input, int position)
+		private string SwapNearSymbols(string input, int position, string alphabet)
 		{
 			if (position >= input.Length - 1)
-				return input;
+				return AddSymbol(input, position, alphabet);
 			var chars = input.ToCharArray();
 			(chars[position], chars[position + 1]) = (chars[position + 1], chars[position]);
 			return new string(chars);
